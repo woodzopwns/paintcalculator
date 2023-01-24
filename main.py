@@ -1,6 +1,21 @@
 import math
 
 
+class Room:
+    def __init__(self):
+        self._walls = set()
+
+    def add_wall(self, new_wall):
+        self._walls.add(new_wall)
+
+    def get_total_area(self):
+        total_area = 0
+        for wall_iteration in self._walls:
+            total_area += wall_iteration.get_area()
+
+        return total_area
+
+
 class Wall:
     def __init__(self, height, width):
         self._height = height
@@ -22,16 +37,21 @@ class Wall:
 
 class Paint:
     def __init__(self, price, paintable_area):
-        self._price = price
-        self._paintable_area = paintable_area
+        self._price_per_metre = price / paintable_area
 
     def calculate_price(self, area):
-        return self._price / self._paintable_area * area
+        return self._price_per_metre * area
 
+
+blue_paint = Paint(10, 10)
+
+room = Room()
 
 wall = Wall(10, 10)
-blue_paint = Paint(10, 10)
 wall.add_square_obstruction(1, 1)
-price = blue_paint.calculate_price(wall.get_area())
+
+room.add_wall(wall)
+
+price = blue_paint.calculate_price(room.get_total_area())
 
 print(price)
