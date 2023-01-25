@@ -1,57 +1,67 @@
-import math
+from House import Paint, Wall, Room, House
 
+# Introduction
+print('Hello! Welcome to the house paint price calculator\n'
+      'this calculator will show you the price of painting your house\n'
+      'internal or external :).\n')
 
-class Room:
-    def __init__(self):
-        self._walls = set()
+# Take user input on number of rooms
+valid = False
+while not valid:
+    try:
+        print('How many rooms will be in your house?')
+        number_rooms = int(input())
+        valid = True
+    except ValueError:
+        print('Sorry! I need a number!\n')
 
-    def add_wall(self, new_wall):
-        self._walls.add(new_wall)
+# Take user input on paint details
+valid = False
+while not valid:
+    try:
+        print('How much does your paint cost per can?')
+        paint_cost = int(input())
+        print('How many metres does your paint cover per can?')
+        paint_coverage = int(input())
+        valid = True
+    except ValueError:
+        print('Sorry! I need a number!\n')
 
-    def get_total_area(self):
-        total_area = 0
-        for wall_iteration in self._walls:
-            total_area += wall_iteration.get_area()
+rooms = []
+for room in range(number_rooms):
+    rooms.append(Room())
 
-        return total_area
+for itx, room in enumerate(rooms):
+    print(f'How many walls are in room {itx+1}?')
+    number_walls = int(input())
+    for wall in range(number_walls):
+        print(f'How wide is wall {wall}?')
+        width = int(input())
+        print(f'How tall is wall {wall}?')
+        height = int(input())
+        new_wall = Wall(width, height)
+        print(f'Are there any obstructions on wall {wall+1}? [Y/N]')
+        if str(input()).upper() == "Y":
+            print(f'Is it circular or square? [C/S]')
+            obstruction_type = str(input())
+            if obstruction_type.upper() == "S":
+                print(f'What is the obstruction height?')
+                obstruction_height = int(input())
+                print(f'And the width?')
+                obstruction_width = int(input())
+                new_wall.add_square_obstruction(height, width)
+            elif obstruction_type.upper() == "C":
+                print(f'What is the obstruction radius?')
+                obstruction_radius = int(input())
+                new_wall.add_circular_obstruction(obstruction_radius)
+        else:
+            rooms[itx].add_wall(new_wall)
 
-
-class Wall:
-    def __init__(self, height, width):
-        self._height = height
-        self._width = width
-        self._area = self._width * self._height
-
-    def get_area(self):
-        return self._area
-
-    def recalculate_area(self, obstruction):
-        self._area -= obstruction
-
-    def add_circular_obstruction(self, radius):
-        self.recalculate_area(radius ** 2 * math.pi)
-
-    def add_square_obstruction(self, height, width):
-        self.recalculate_area(height * width)
-
-
-class Paint:
-    def __init__(self, price, paintable_area):
-        self._price_per_metre = price / paintable_area
-
-    def calculate_price(self, area):
-        return self._price_per_metre * area
-
+house = House()
+for room in rooms:
+    house.add_room(room)
 
 blue_paint = Paint(10, 10)
+price = blue_paint.calculate_price(house.get_house_area())
 
-room = Room()
-
-wall = Wall(10, 10)
-wall.add_square_obstruction(1, 1)
-
-room.add_wall(wall)
-
-price = blue_paint.calculate_price(room.get_total_area())
-
-print(price)
+print(f'Your final price is: £{price}')
