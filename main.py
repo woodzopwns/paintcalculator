@@ -27,17 +27,19 @@ while not valid:
     except ValueError:
         print('Sorry! I need a number!\n')
 
+# Making a list of rooms to be added to the house later
 rooms = []
 for room in range(number_rooms):
     rooms.append(Room())
 
+# I don't know what the fuck this is
 for itx, room in enumerate(rooms):
     print(f'How many walls are in room {itx+1}?')
     number_walls = int(input())
     for wall in range(number_walls):
-        print(f'How wide is wall {wall}?')
+        print(f'How wide is wall {wall+1}?')
         width = int(input())
-        print(f'How tall is wall {wall}?')
+        print(f'How tall is wall {wall+1}?')
         height = int(input())
         new_wall = Wall(width, height)
         print(f'Are there any obstructions on wall {wall+1}? [Y/N]')
@@ -57,11 +59,14 @@ for itx, room in enumerate(rooms):
         else:
             rooms[itx].add_wall(new_wall)
 
+# Adding the rooms with their newly added walls to the house
 house = House()
 for room in rooms:
     house.add_room(room)
 
+# Placeholder paint stuff
 blue_paint = Paint(10, 10)
 price = blue_paint.calculate_price(house.get_house_area())
 
-print(f'Your final price is: £{price}')
+# Final price to 2 decimals as per currency standards
+print(f'Your final price is: £%.2f' % price)
