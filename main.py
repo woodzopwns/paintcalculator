@@ -64,7 +64,7 @@ house = House()
 for room in rooms:
     house.add_room(room)
 
-# Placeholder paint stuff
+# Placeholder paint stuffs
 blue_paint = Paint(10, 10)
 price = blue_paint.calculate_price(house.get_house_area())
 
